@@ -7,18 +7,25 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private Transform aimPoint;
+    [SerializeField] private Transform aimFirePoint;
     [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private float timeBetweenShots;
 
     private Vector2 moveInput;
     private Camera mainCamera;
     private Rigidbody2D playerRB;
     private Animator animator;
+    private float shotCounter;
+    private Vector3 shootingVector3;
+    private Vector3 shootingOffsetVector3 = new Vector3(0f, 0f, 90f);
 
     private void Start()
     {
         mainCamera = Camera.main;
         playerRB = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        shotCounter = timeBetweenShots;
     }
 
     private void Update()
@@ -79,22 +86,32 @@ public class PlayerController : MonoBehaviour
         if (mousePosition.x < screenPoint.x)
         {
             transform.localScale = Vector3.one;
-            aimPoint.localScale = Vector3.one;
+            aimPoint.localScale = new Vector3(-1f, 1f, 1f);
         }
         else
         {
             transform.localScale = new Vector3(-1f, 1f, 1f);
-            aimPoint.localScale = new Vector3(-1f, 1f, 1f);
+            aimPoint.localScale = Vector3.one;
         }
 
         Vector2 offset = new Vector2(mousePosition.x - screenPoint.x, mousePosition.y - screenPoint.y);
         float angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
         aimPoint.rotation = Quaternion.Euler(0f, 0f, angle);
+        shootingVector3 = aimFirePoint.rotation.eulerAngles;
+        Quaternion aimDir = Quaternion.Euler(shootingVector3 + shootingOffsetVector3);
 
-        if (Input.GetMouseButtonDown(0))
+        shotCounter -= Time.deltaTime;
+
+        if (shotCounter <= 0f)
         {
-            //GameObject bulletGameObject = Instantiate(bulletPrefab, gunFirePoint.position, gunFirePoint.rotation);
+            ShootBullet(aimDir);
         }
+    }
+
+    private void ShootBullet(Quaternion aimDir)
+    {
+        GameObject bulletGameObject = Instantiate(bulletPrefab, aimFirePoint.position, aimDir);
+        shotCounter = timeBetweenShots;
     }
 
     public Vector2 GetMovementInput()

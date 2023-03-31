@@ -8,12 +8,12 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Terrain
-  - 
-  - 
+  - Bullets
+  - Enemies
   - 
   - 
   - 
@@ -44,6 +44,12 @@ TagManager:
   - name: Props
     uniqueID: 2701195669
     locked: 0
+  - name: Enemies
+    uniqueID: 213304583
+    locked: 0
   - name: Player
     uniqueID: 607855645
+    locked: 0
+  - name: Projectiles
+    uniqueID: 3830351391
     locked: 0

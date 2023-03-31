@@ -27,7 +27,10 @@ public class BulletController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Destroy(gameObject);
+        if (other.tag == "Enemy")
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnBecameInvisible()
