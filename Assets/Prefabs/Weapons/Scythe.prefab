@@ -9,9 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2765542964790177918}
+  - component: {fileID: 8636977614522637690}
   m_Layer: 0
   m_Name: Scythe
-  m_TagString: Untagged
+  m_TagString: Scythe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,6 +33,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8636977614522637690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2765542964790177917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73f19275dfe785d4d85f72e72120457b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 0}
+  weaponType: 2
+  fireMode: 0
 --- !u!1 &7078289404977021196
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,7 +119,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 607855645
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_Sprite: {fileID: 900508438662086951, guid: 859caa1337f1497c857b71771e7c5295, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

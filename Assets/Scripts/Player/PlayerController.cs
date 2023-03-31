@@ -8,24 +8,26 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private Transform aimPoint;
     [SerializeField] private Transform aimFirePoint;
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private float timeBetweenShots;
+    [SerializeField] private float fireRate = 0.08f;
+    [SerializeField] private float arrowFireRate = 0.2f;
+    [SerializeField] private GameObject[] weapons;
 
     private Vector2 moveInput;
     private Camera mainCamera;
     private Rigidbody2D playerRB;
     private Animator animator;
-    private float shotCounter;
     private Vector3 shootingVector3;
     private Vector3 shootingOffsetVector3 = new Vector3(0f, 0f, 90f);
+    private Quaternion aimDir;
+    private FireMode fireMode;
+    private float fireTimer = 0f;
+    private bool bursting;
 
     private void Start()
     {
         mainCamera = Camera.main;
         playerRB = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-
-        shotCounter = timeBetweenShots;
     }
 
     private void Update()
@@ -98,20 +100,70 @@ public class PlayerController : MonoBehaviour
         float angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
         aimPoint.rotation = Quaternion.Euler(0f, 0f, angle);
         shootingVector3 = aimFirePoint.rotation.eulerAngles;
-        Quaternion aimDir = Quaternion.Euler(shootingVector3 + shootingOffsetVector3);
+        aimDir = Quaternion.Euler(shootingVector3 + shootingOffsetVector3);
 
-        shotCounter -= Time.deltaTime;
-
-        if (shotCounter <= 0f)
+        // Shooting
+        if (fireTimer < fireRate + 1f)
         {
-            ShootBullet(aimDir);
+            fireTimer += Time.deltaTime;
+        }
+
+        if (fireTimer > fireRate && !bursting)
+        {
+            fireTimer = 0f;
+
+            //Rifle
+            if (gameObject.GetComponentInChildren<WeaponController>().GetWeaponType() == WeaponController.WeaponType.Rifle &&
+                gameObject.GetComponentInChildren<WeaponController>().enabled)
+            {
+                bursting = true;
+                fireMode = FireMode.Burst;
+                print(gameObject.GetComponentInChildren<WeaponController>().GetWeaponType());
+                StartCoroutine(BurstFireRifle(gameObject.GetComponentInChildren<WeaponController>().projectilePrefab));
+            }
+            //Gun
+            else if (gameObject.GetComponentInChildren<WeaponController>().GetWeaponType() == WeaponController.WeaponType.Gun &&
+                     gameObject.GetComponentInChildren<WeaponController>().enabled)
+            {
+                fireMode = FireMode.Semi;
+                ShootBullet(aimDir, gameObject.GetComponentInChildren<WeaponController>().projectilePrefab);
+                print(gameObject.GetComponentInChildren<WeaponController>().GetWeaponType());
+            }
+            //Bow
+            else if (gameObject.GetComponentInChildren<WeaponController>().GetWeaponType() == WeaponController.WeaponType.Bow &&
+                     gameObject.GetComponentInChildren<WeaponController>().enabled)
+            {
+                bursting = true;
+                fireMode = FireMode.Burst;
+                print(gameObject.GetComponentInChildren<WeaponController>().GetWeaponType());
+                StartCoroutine(BurstFireBow(gameObject.GetComponentInChildren<WeaponController>().projectilePrefab));
+            }
         }
     }
 
-    private void ShootBullet(Quaternion aimDir)
+    private IEnumerator BurstFireRifle(GameObject projectile)
     {
-        GameObject bulletGameObject = Instantiate(bulletPrefab, aimFirePoint.position, aimDir);
-        shotCounter = timeBetweenShots;
+        yield return new WaitForSeconds(fireTimer);
+        ShootBullet(aimDir, projectile);
+        yield return new WaitForSeconds(fireTimer);
+        ShootBullet(aimDir, projectile);
+        yield return new WaitForSeconds(fireTimer);
+        ShootBullet(aimDir, projectile);
+        bursting = false;
+    }
+
+    private IEnumerator BurstFireBow(GameObject projectile)
+    {
+        yield return new WaitForSeconds(fireTimer + 0.2f);
+        ShootBullet(aimDir, projectile);
+        yield return new WaitForSeconds(fireTimer + 0.2f);
+        ShootBullet(aimDir, projectile);
+        bursting = false;
+    }
+
+    private void ShootBullet(Quaternion aimDir, GameObject projectile)
+    {
+        GameObject bulletGameObject = Instantiate(projectile, aimFirePoint.position, aimDir);
     }
 
     public Vector2 GetMovementInput()

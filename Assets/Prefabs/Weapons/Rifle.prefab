@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 607855645
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_Sprite: {fileID: 8333481726314500824, guid: 23d536d6083344698e17aa8fc049b99f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -93,9 +93,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8133904018099258212}
+  - component: {fileID: -177104441422703658}
   m_Layer: 0
   m_Name: Rifle
-  m_TagString: Untagged
+  m_TagString: Rifle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -116,3 +117,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-177104441422703658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8133904018099258213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73f19275dfe785d4d85f72e72120457b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 4047850975479793740, guid: 303c1aeb8af3be644952397451e7016c, type: 3}
+  weaponType: 5
+  fireMode: 2
